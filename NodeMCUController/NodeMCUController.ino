@@ -1,99 +1,123 @@
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
-#include <ESP8266WiFi.h>
+#include <ESP8266WiFi.h> 
+#include <PubSubClient.h>
 
-// const char* ssid = "HW_ROUTER";
-// const char* password = "t12313261";
-// WiFiServer server(8000);
-String inputString = "";
 Adafruit_MPU6050 mpu;
 
+// Wi-Fi settings
+const char* ssid  = "HW_ROUTER";
+const char* password= "t12312361";
+
+// MQTT settings
+const char* mqtt_server = "192.168.1.102";
+const int mqtt_port =1883;
+const char* mqtt_user = "user";
+const char* mqtt_password = "1234";
+const char* mqtt_topic = "sensor/data";
+
+// Pin definitions
 #define HALL_SENSOR_PIN 14  // D5
 #define BUTTON1_PIN 12      // D6
 #define BUTTON2_PIN 13      // D7
-#define TOUCH_SENSOR_PIN A0  //A0
 
+#define JOYSTICK_X A0
+#define JOYSTICK_SW 15
+
+WiFiClient espClient;
+PubSubClient client(espClient);
 
 void setup() {
     Serial.begin(115200);
-  //   WiFi.begin(ssid, password);
-  //   Serial.println("正在連接 WiFi...");
-  // while (WiFi.status() != WL_CONNECTED) {
-  //   delay(500);
-  //   Serial.print(".");
-  // }
 
-  // Serial.println("WiFi 已連接！");
-  // Serial.print("IP 地址: ");
-  // Serial.println(WiFi.localIP());
-
-  // server.begin();
     pinMode(HALL_SENSOR_PIN, INPUT);
     pinMode(BUTTON1_PIN, INPUT_PULLUP);
     pinMode(BUTTON2_PIN, INPUT_PULLUP);
-    pinMode(TOUCH_SENSOR_PIN, INPUT);
+    pinMode(JOYSTICK_SW, INPUT_PULLUP);  // Joystick button as digital input
 
-    // 初始化 MPU-6050（Adafruit 的寫法）
+    // Connect to Wi-Fi
+    setup_wifi();
+
+    // Initialize MPU-6050
     if (!mpu.begin()) {
-        Serial.println("MPU6050 初始化失敗！");
+        Serial.println("MPU6050 initialization failed!");
         while (1) delay(10);
     } else {
-        Serial.println("MPU6050 已連接");
+        Serial.println("MPU6050 connected");
     }
 
     mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
     mpu.setGyroRange(MPU6050_RANGE_500_DEG);
     mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
+
+    client.setServer(mqtt_server, mqtt_port);
+    Serial.print(mqtt_server);
+}
+
+void setup_wifi() {
+    delay(10);
+    Serial.println();
+    Serial.print("Connecting to WiFi...");
+
+    WiFi.begin(ssid, password);
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(250);
+        Serial.print(".");
+    }
+
+    Serial.println("Connected to WiFi");
+    Serial.print("IP address: ");
+    Serial.println(WiFi.localIP());
+}
+
+void reconnect() {
+    while (!client.connected()) {
+        Serial.print("Attempting MQTT connection...");
+        if (client.connect("ESP8266", mqtt_user, mqtt_password)) {
+            Serial.println("Connected to MQTT broker");
+        } else {
+            Serial.print("Failed to connect, rc=");
+            Serial.print(client.state());
+            delay(2000);
+        }
+    }
 }
 
 void loop() {
-  //   WiFiClient client = server.available();
-  //   if (client) {
-  //   Serial.println("有客戶端連進來");
+    // Ensure MQTT connection
+    if (!client.connected()) {
+        reconnect();
+    }
+    client.loop();
 
-  //   while (client.connected()) {
-  //     while (Serial.available()) {
-  //       char c = Serial.read();
-  //       inputString += c;
-  //       if (c == '\n') {
-  //         client.print(inputString);  // 將字串傳給 Unity
-  //         inputString = "";
-  //       }
-  //     }
-  //   }
-
-  //   client.stop();
-  //   Serial.println("客戶端離線");
-  // }
-  if (Serial.available()) {
-    inputString = Serial.readStringUntil('\n');
-    Serial.print("收到來自 Nano: "); Serial.println(inputString);
-  }
     int hallValue = digitalRead(HALL_SENSOR_PIN);
     int button1State = digitalRead(BUTTON1_PIN);
     int button2State = digitalRead(BUTTON2_PIN);
 
-    int touchValue = analogRead(TOUCH_SENSOR_PIN);
+    // Read joystick
+    int joyX = analogRead(JOYSTICK_X);
+    int joySW = digitalRead(JOYSTICK_SW);
 
-    // Serial.print("Hall Sensor: "); Serial.println(hallValue);
-    // Serial.print("Button 1: "); Serial.print(button1State);
-    // Serial.print("  |  Button 2: "); Serial.println(button2State);
-
-    // Serial.print("Touch Sensor: "); Serial.println(touchValue);
-
+    // Read MPU6050
     sensors_event_t a, g, temp;
     mpu.getEvent(&a, &g, &temp);
 
-    // Serial.print("Accel: ");
-    // Serial.print(a.acceleration.x); Serial.print(", ");
-    // Serial.print(a.acceleration.y); Serial.print(", ");
-    // Serial.println(a.acceleration.z);
+    // Prepare the payload as a JSON string or simple text
+    String payload = "Hall_Sensor:" + String(hallValue) + ","
+                     + "Button_1:" + String(button1State) + ","
+                     + "Button_2:" + String(button2State) + ","
+                     + "Joystick_X:" + String(joyX) + ","
+                     + "Joystick_SW:" + String(joySW) + ","
+                     + "Accel:(" + String(a.acceleration.x) + " " + String(a.acceleration.y) + " " + String(a.acceleration.z) + "),"
+                     + "Gyro:(" + String(g.gyro.x) + " " + String(g.gyro.y) + " " + String(g.gyro.z) + ")";
 
-    // Serial.print("Gyro: ");
-    // Serial.print(g.gyro.x); Serial.print(", ");
-    // Serial.print(g.gyro.y); Serial.print(", ");
-    // Serial.println(g.gyro.z);
+    // Publish the payload to the MQTT topic
+    if (client.publish(mqtt_topic, payload.c_str())) {
+        Serial.println("Data sent to MQTT broker");
+    } else {
+        Serial.println("Failed to send data to MQTT broker");
+    }
 
-    delay(500);
+    delay(10); // Wait for a while before sending the next set of data
 }
