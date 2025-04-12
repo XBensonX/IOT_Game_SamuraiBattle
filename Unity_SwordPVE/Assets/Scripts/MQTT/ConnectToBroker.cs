@@ -12,7 +12,7 @@ public class ConnectToBroker : MonoBehaviour
     [SerializeField] private string username = "mqtt";
     [SerializeField] private string passwd = "passwd";
 
-    [SerializeField] private string[] topics = { "senser/data" };
+    [SerializeField] private string[] topics = { "sensor/data" };
     [SerializeField] byte[] qosLevels = { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE };
             
     void Start()

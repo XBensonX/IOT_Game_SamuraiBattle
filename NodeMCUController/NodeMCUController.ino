@@ -11,10 +11,10 @@ const char* ssid  = "HW_ROUTER";
 const char* password= "t12312361";
 
 // MQTT settings
-const char* mqtt_server = "192.168.1.102";
+const char* mqtt_server = "192.168.1.109";
 const int mqtt_port =1883;
-const char* mqtt_user = "user";
-const char* mqtt_password = "1234";
+const char* mqtt_user = "mqtt";
+const char* mqtt_password = "passwd";
 const char* mqtt_topic = "sensor/data";
 
 // Pin definitions
@@ -98,7 +98,7 @@ void loop() {
     // Read joystick
     int joyX = analogRead(JOYSTICK_X);
     int joySW = digitalRead(JOYSTICK_SW);
-
+    joySW=!joySW;
     // Read MPU6050
     sensors_event_t a, g, temp;
     mpu.getEvent(&a, &g, &temp);
