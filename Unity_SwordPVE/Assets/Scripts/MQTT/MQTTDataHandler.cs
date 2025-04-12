@@ -22,6 +22,11 @@ public class MQTTDataHandler : MonoBehaviour
         if (instance == null) instance = this;
     }
 
+    private void Update()
+    {
+        if (isHallTrigger) Offset();
+    }
+
     public void SplitData()
     {
         if (data == string.Empty) return;
@@ -67,5 +72,10 @@ public class MQTTDataHandler : MonoBehaviour
                     break;
             }
         }
+    }
+
+    private void Offset()
+    {
+        PlayerController.instance.originJoystick = joystickVal;
     }
 }

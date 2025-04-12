@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4535136566293538773}
   - component: {fileID: 9143728095570046712}
+  - component: {fileID: 5624162145421603649}
   m_Layer: 0
   m_Name: MQTT
   m_TagString: Untagged
@@ -50,3 +51,23 @@ MonoBehaviour:
   topics:
   - senser/data
   qosLevels: 00
+--- !u!114 &5624162145421603649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4494943731473339142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ce66ce58a010b441b70273e31f3dbf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: 
+  isHallTrigger: 0
+  isAttackBtnPressed: 0
+  isDefenseBtnPressed: 0
+  joystickVal: 0
+  isJoystickPressed: 0
+  acceleration_MPU6050: {x: 0, y: 0, z: 0}
+  gyro_MPU6050: {x: 0, y: 0, z: 0}
