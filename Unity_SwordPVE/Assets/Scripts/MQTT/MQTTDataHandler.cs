@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MQTTDataHandler : MonoBehaviour
 {
+    public const float ANGLE_RAD_TO_DEGREE = 180 / Mathf.PI;
+
     public static MQTTDataHandler instance;
 
     [HideInInspector] public string data;
@@ -79,7 +81,9 @@ public class MQTTDataHandler : MonoBehaviour
                 case "Gyro": // gyro in MPU6050
                     string gyroXYZ_Str = sensor.Split(":")[1].Replace("(", "").Replace(")", "");
                     string[] gyroXYZ = gyroXYZ_Str.Split(" "); // Final Split: Spliting to X Y Z for Vector3.
-                    gyro_MPU6050 = new Vector3(float.Parse(gyroXYZ[0]), float.Parse(gyroXYZ[1]), float.Parse(gyroXYZ[2]));
+                    gyro_MPU6050 = new Vector3(float.Parse(gyroXYZ[0]) * ANGLE_RAD_TO_DEGREE, 
+                                               float.Parse(gyroXYZ[1]) * ANGLE_RAD_TO_DEGREE, 
+                                               float.Parse(gyroXYZ[2]) * ANGLE_RAD_TO_DEGREE);
                     break;
                 default:
                     break;

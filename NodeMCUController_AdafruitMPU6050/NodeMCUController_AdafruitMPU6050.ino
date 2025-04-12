@@ -1,6 +1,10 @@
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
 #include <Wire.h>
 #include <ESP8266WiFi.h> 
 #include <PubSubClient.h>
+
+Adafruit_MPU6050 mpu;
 
 // Wi-Fi settings
 const char* ssid  = "HW_ROUTER";
