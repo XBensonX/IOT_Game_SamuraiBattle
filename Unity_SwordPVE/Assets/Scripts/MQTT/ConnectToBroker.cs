@@ -14,7 +14,7 @@ public class ConnectToBroker : MonoBehaviour
 
     [SerializeField] private string[] topics = { "sensor/data" };
     [SerializeField] byte[] qosLevels = { MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE };
-            
+ 
     void Start()
     {
         MqttClient client = new MqttClient(brokerAddr);
@@ -27,7 +27,8 @@ public class ConnectToBroker : MonoBehaviour
 
     void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
     {
-        string mqttPayload = System.Text.Encoding.Default.GetString(e.Message);
-        Debug.Log(mqttPayload);
+        MQTTDataHandler.instance.data = System.Text.Encoding.Default.GetString(e.Message);
+        Debug.Log(MQTTDataHandler.instance.data);
+        MQTTDataHandler.instance.SplitData();
     }
 }
