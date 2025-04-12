@@ -8,11 +8,12 @@ public class MQTTDataHandler : MonoBehaviour
 
     [HideInInspector] public string data;
 
-    // TODO: each sensor use respective variable
+    // Each sensor's data
     public bool isHallTrigger = false;
     public bool isAttackBtnPressed = false;
     public bool isDefenseBtnPressed = false;
     public float joystickVal = 0.0f;
+    public bool isJoystickPressed = false;
     public Vector3 acceleration_MPU6050 = Vector3.zero;
     public Vector3 gyro_MPU6050 = Vector3.zero;
 
@@ -35,27 +36,29 @@ public class MQTTDataHandler : MonoBehaviour
             // Saving data directly if DATA is integer.
             // Otherwise, handle it.
 
-            // TODO: Modify SENSOR's name
             switch (sensorColumns[0])
             {
-                case "HallSensor": // Hall Sensor
+                case "Hall_Sensor": // Hall Sensor
                     isHallTrigger = sensor.Split(":")[1] == "1" ? true : false;
                     break;
-                case "AttackBtn": // Attack Button
+                case "Button_1": // Attack Button
                     isAttackBtnPressed = sensor.Split(":")[1] == "1" ? true : false;
                     break;
-                case "DefenseBtn": // Defense Button
+                case "Button_2": // Defense Button
                     isDefenseBtnPressed = sensor.Split(":")[1] == "1" ? true : false;
                     break;
-                case "Joystick": // Joystick
+                case "Joystick_X": // Joystick movement
                     joystickVal = float.Parse(sensor.Split(":")[1]);
                     break;
-                case "Acceleration_MPU6050": // acceleration in MPU6050
+                case "Joystick_SW": // Joystick Button
+                    isJoystickPressed = sensor.Split(":")[1] == "1" ? true : false;
+                    break;
+                case "Accel": // acceleration in MPU6050
                     string accXYZ_Str = sensor.Split(":")[1].Replace("(", "").Replace(")", "");
                     string[] accXYZ = accXYZ_Str.Split(" "); // Final Split: Spliting to X Y Z for Vector3.
                     acceleration_MPU6050 = new Vector3(float.Parse(accXYZ[0]), float.Parse(accXYZ[1]), float.Parse(accXYZ[2]));
                     break;
-                case "Gyro_MPU6050": // gyro in MPU6050
+                case "Gyro": // gyro in MPU6050
                     string gyroXYZ_Str = sensor.Split(":")[1].Replace("(", "").Replace(")", "");
                     string[] gyroXYZ = gyroXYZ_Str.Split(" "); // Final Split: Spliting to X Y Z for Vector3.
                     gyro_MPU6050 = new Vector3(float.Parse(gyroXYZ[0]), float.Parse(gyroXYZ[1]), float.Parse(gyroXYZ[2]));
