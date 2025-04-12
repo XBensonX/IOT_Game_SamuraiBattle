@@ -44,13 +44,12 @@ public class EnemyController : MonoBehaviour
             PlayerController.instance.GetComponent<HPSystem>().HP--;
             if (PlayerController.instance.GetComponent<HPSystem>().HP <= 0)
             {
-                // TODO
-                Debug.Log("Game Finish!");
+                GameManager.instance.GameFinish();
             }
         }
         else
         {
-            UIController.instance.ShowBlockedState();
+            GameManager.instance.ShowBlockedState();
         }
     }
 }

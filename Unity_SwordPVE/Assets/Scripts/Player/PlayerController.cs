@@ -118,6 +118,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void DrawSword()
+    {
+        _katanaObj.SetActive(true);
+    }
+
     private void Attack()
     {
         isAttacking = true;
