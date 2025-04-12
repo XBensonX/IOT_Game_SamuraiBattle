@@ -10,9 +10,10 @@ public class GameManager : MonoBehaviour
         
     [SerializeField] private Canvas _titleUI;
     [SerializeField] private Canvas _gamOverUI;
+    [SerializeField] private TextMeshProUGUI _titleTextInGameOverUI;
     [SerializeField] private Canvas _hud;
     [SerializeField] private EnemyController _enemyController;
-    [SerializeField] private HPSystem _hpSystem;
+    [SerializeField] private HPSystem _playerHPSystem;
 
     [Header("InGame")]
     [SerializeField] private TextMeshProUGUI _stateText;
@@ -36,7 +37,7 @@ public class GameManager : MonoBehaviour
 
             _hud.gameObject.SetActive(true);
             _enemyController.enabled = true;
-            _hpSystem.enabled = true;
+            _playerHPSystem.enabled = true;
             PlayerController.instance.DrawSword();
         }
 
@@ -87,13 +88,16 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void GameFinish()
+    public void GameFinish(string title, bool isWin)
     {
         isGameOver = true;
         _gamOverUI.gameObject.SetActive(true);
 
+        _titleTextInGameOverUI.text = title;
+        _titleTextInGameOverUI.color = isWin ? Color.green : Color.red;
+
         _hud.gameObject.SetActive(false);
         _enemyController.enabled = false;
-        _hpSystem.enabled = false;
+        _playerHPSystem.enabled = false;
     }
 }

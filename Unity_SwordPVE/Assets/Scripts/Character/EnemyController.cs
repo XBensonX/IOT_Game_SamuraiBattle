@@ -16,6 +16,7 @@ public class EnemyController : MonoBehaviour
     private void Start()
     {
         _animator = GetComponent<Animator>();
+        GetComponent<HPSystem>().enabled = true;
 
         _targetTime = Random.Range(_minSec, _maxSec);
     }
@@ -30,6 +31,8 @@ public class EnemyController : MonoBehaviour
             _sec = 0;
         }
         //Debug.Log(_sec + " " + _targetTime);
+
+        Died();
     }
 
     private void Attack()
@@ -44,12 +47,19 @@ public class EnemyController : MonoBehaviour
             PlayerController.instance.GetComponent<HPSystem>().HP--;
             if (PlayerController.instance.GetComponent<HPSystem>().HP <= 0)
             {
-                GameManager.instance.GameFinish();
+                GameManager.instance.GameFinish("YOU DIED", false);
             }
         }
         else
         {
             GameManager.instance.ShowBlockedState();
         }
+    }
+
+    public void Died()
+    {
+        if (GetComponent<HPSystem>().HP > 0) return;
+
+        GameManager.instance.GameFinish("CONGRADUATION!", true);
     }
 }

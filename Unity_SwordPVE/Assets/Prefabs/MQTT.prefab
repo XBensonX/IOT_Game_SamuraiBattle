@@ -66,8 +66,9 @@ MonoBehaviour:
   data: 
   isHallTrigger: 0
   isAttackBtnPressed: 0
-  isDefenseBtnPressed: 0
+  isResetBtnPressed: 0
   joystickVal: 0
   isJoystickPressed: 0
   acceleration_MPU6050: {x: 0, y: 0, z: 0}
   gyro_MPU6050: {x: 0, y: 0, z: 0}
+  _holdToTriggerSecs: 5

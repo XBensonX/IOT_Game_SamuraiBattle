@@ -11,6 +11,7 @@ public class HPSystem : MonoBehaviour
     [Header("UI")]
     [SerializeField] private GameObject _hpGroupInUI;
     [SerializeField] private Image _image;
+    [SerializeField] private float _gap = 20f;
     private List<Image> _images = new List<Image>();
 
     public int HP
@@ -25,8 +26,8 @@ public class HPSystem : MonoBehaviour
         for (int i = 0; i < _hp; i++)
         {
             _images.Add(Instantiate(_image, _hpGroupInUI.transform));
-            _images[i].GetComponent<RectTransform>().position
-                += new Vector3(i * _images[i].GetComponent<RectTransform>().sizeDelta.x * 2, 0, 0);
+            _images[i].GetComponent<RectTransform>().localPosition
+                += new Vector3(i * (_images[i].GetComponent<RectTransform>().sizeDelta.x + _gap), 0, 0);
         }
     }
 

@@ -13,7 +13,7 @@ public class MQTTDataHandler : MonoBehaviour
     public bool isHallTrigger = false;
     public bool isAttackBtnPressed = false;
     public bool isResetBtnPressed = false;
-    public float joystickVal = 0.0f;
+    public float joystickVal = 530f;
     public bool isJoystickPressed = false; // Defense
     public Vector3 acceleration_MPU6050 = Vector3.zero;
     public Vector3 gyro_MPU6050 = Vector3.zero;

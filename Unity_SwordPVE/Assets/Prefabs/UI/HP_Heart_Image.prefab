@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7303859208584940807}
   - component: {fileID: 4864693367700485522}
   m_Layer: 0
-  m_Name: Point
+  m_Name: HP_Heart_Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

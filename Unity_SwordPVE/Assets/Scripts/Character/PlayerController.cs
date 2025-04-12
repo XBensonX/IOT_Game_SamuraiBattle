@@ -53,6 +53,8 @@ public class PlayerController : MonoBehaviour
         LootAtEnemy();
         HeadBob();
 
+        SyncKatanaRotation();
+
         // Attack's Priority is higher than Defense.
         if (MQTTDataHandler.instance.isAttackBtnPressed)
         {
@@ -110,6 +112,14 @@ public class PlayerController : MonoBehaviour
         {
             _katanaObj.transform.localPosition = _originPos;
             _katanaObj.transform.localEulerAngles = _originRot;
+        }
+    }
+
+    private void SyncKatanaRotation()
+    {
+        if (_katanaObj)
+        {
+            _katanaObj.transform.localEulerAngles = _originRot + MQTTDataHandler.instance.gyro_MPU6050;
         }
     }
 
