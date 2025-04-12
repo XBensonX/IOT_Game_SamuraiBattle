@@ -27,19 +27,14 @@ public class PlayerController : MonoBehaviour
 
     private float _originPosY;
 
-    #region Head Bob
-
     [Header("Head Bob")]
     public bool enableHeadBob = true;
     public Transform joint;
     public float bobSpeed = 10f;
     public Vector3 bobAmount = new Vector3(.15f, .05f, 0f);
 
-    // Internal Variables
     private Vector3 _jointOriginalPos;
     private float _timer = 0;
-
-    #endregion
 
     private void Start()
     {
