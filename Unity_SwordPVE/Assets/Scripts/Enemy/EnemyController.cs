@@ -25,10 +25,32 @@ public class EnemyController : MonoBehaviour
         _sec += Time.deltaTime;
         if (_sec >= _targetTime)
         {
-            _animator.SetTrigger("Attack");
+            Attack();
             _targetTime = Random.Range(_minSec, _maxSec);
             _sec = 0;
         }
         //Debug.Log(_sec + " " + _targetTime);
+    }
+
+    private void Attack()
+    {
+        _animator.SetTrigger("Attack");
+    }
+
+    public void AttackedOnAnimationFrame()
+    {
+        if (!PlayerController.instance.isBlocking)
+        {
+            PlayerController.instance.GetComponent<HPSystem>().HP--;
+            if (PlayerController.instance.GetComponent<HPSystem>().HP <= 0)
+            {
+                // TODO
+                Debug.Log("Game Finish!");
+            }
+        }
+        else
+        {
+            UIController.instance.ShowBlockedState();
+        }
     }
 }

@@ -9,13 +9,18 @@ public class MQTTDataHandler : MonoBehaviour
     [HideInInspector] public string data;
 
     // Each sensor's data
+    [Header("Sensor Data")]
     public bool isHallTrigger = false;
     public bool isAttackBtnPressed = false;
-    public bool isDefenseBtnPressed = false;
+    public bool isResetBtnPressed = false;
     public float joystickVal = 0.0f;
-    public bool isJoystickPressed = false;
+    public bool isJoystickPressed = false; // Defense
     public Vector3 acceleration_MPU6050 = Vector3.zero;
     public Vector3 gyro_MPU6050 = Vector3.zero;
+
+    [Header("")]
+    private float _holdSecs = 0;
+    [SerializeField] private float _holdToTriggerSecs = 5f;
 
     void Start()
     {
@@ -24,7 +29,15 @@ public class MQTTDataHandler : MonoBehaviour
 
     private void Update()
     {
-        if (isHallTrigger) Offset();
+        // hold 2 buttons to trigger
+        if (isResetBtnPressed) _holdSecs += Time.deltaTime;
+        else _holdSecs = 0;
+        //Debug.Log(_holdSecs);
+        if (_holdSecs >= _holdToTriggerSecs)
+        {
+            Offset();
+            _holdSecs = 0;
+        }
     }
 
     public void SplitData()
@@ -50,7 +63,7 @@ public class MQTTDataHandler : MonoBehaviour
                     isAttackBtnPressed = sensor.Split(":")[1] == "1" ? true : false;
                     break;
                 case "Button_2": // Defense Button
-                    isDefenseBtnPressed = sensor.Split(":")[1] == "1" ? true : false;
+                    isResetBtnPressed = sensor.Split(":")[1] == "1" ? true : false;
                     break;
                 case "Joystick_X": // Joystick movement
                     joystickVal = float.Parse(sensor.Split(":")[1]);
@@ -77,5 +90,6 @@ public class MQTTDataHandler : MonoBehaviour
     private void Offset()
     {
         PlayerController.instance.originJoystick = joystickVal;
+        PlayerController.instance.ResetKatanaPosAndRot();
     }
 }
