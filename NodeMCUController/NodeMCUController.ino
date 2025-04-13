@@ -136,11 +136,19 @@ void loop() {
     int joySW = digitalRead(JOYSTICK_SW);
     joySW=!joySW;
     // Read MPU6050
-    int16_t ax, ay, az;
+    int16_t axLSB, ayLSB, azLSB;
     int16_t gx, gy, gz;
-    mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
-    //mpu.getAcceleration(&ax, &ay, &az);
+    mpu.getMotion6(&axLSB, &ayLSB, &azLSB, &gx, &gy, &gz);
+    //mpu.getAcceleration(&axLSB, &ayLSB, &azLSB);
     //mpu.getRotation(&gx, &gy, &gz);
+
+    float rateRoll = (float)gx/65.5;
+    float ratePitch = (float)gy/65.5;
+    float rateYaw = (float)gz/65.5;
+
+    float ax = (float)axLSB / 32768;
+    float ay = (float)ayLSB / 32768;
+    float az = (float)azLSB / 32768;
 
     // Prepare the payload as a JSON string or simple text
     String payload = "Hall_Sensor:" + String(hallValue) + ","
@@ -148,7 +156,7 @@ void loop() {
                      + "Button_2:" + String(button2State) + ","
                      + "Joystick_X:" + String(joyX) + ","
                      + "Joystick_SW:" + String(joySW) + ","
-                     + "Accel:(" + String(ax) + " " + String(ay) + " " + String(az) + "),"
+                     + "Accel:(" + String(axLSB) + " " + String(ayLSB) + " " + String(azLSB) + "),"
                      + "Gyro:(" + String(gx) + " " + String(gy) + " " + String(gz) + ")";
 
     // Publish the payload to the MQTT topic
