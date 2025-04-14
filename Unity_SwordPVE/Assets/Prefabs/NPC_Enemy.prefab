@@ -3315,17 +3315,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5627715589767452202}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: -0.7071068, y: 0.7071068, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1651338806956400023}
   m_Father: {fileID: 6718053162946425023}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1.775}
+  m_AnchoredPosition: {x: -0.358, y: 1.384}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1195627290584750481
@@ -4569,6 +4569,7 @@ GameObject:
   - component: {fileID: 1852168394467297417}
   - component: {fileID: 8164824638336029774}
   - component: {fileID: 2388249547162262335}
+  - component: {fileID: 5550395378643836112}
   m_Layer: 0
   m_Name: NPC_Enemy
   m_TagString: Untagged
@@ -4648,14 +4649,38 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7733170974704852827}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9de0fc4804eae84db71be0a8f82923e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHP: 3
+  _maxHP: 5
   _hpGroupInUI: {fileID: 854253533072268915}
   _image: {fileID: 5568304378606143174, guid: ae0645aea4a17e04eafa5c165f69114c, type: 3}
+  _gap: 10
+--- !u!136 &5550395378643836112
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7733170974704852827}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.3
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.85, z: 0}
 --- !u!1 &7890295292405365035
 GameObject:
   m_ObjectHideFlags: 0

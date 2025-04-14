@@ -6,6 +6,8 @@ public class EnemyController : MonoBehaviour
 {
     private Animator _animator;
 
+    [SerializeField] private AudioClip _enemyClip;
+
     [Header("Attack Time Duration")]
     [SerializeField] private float _minSec = 3f;
     [SerializeField] private float _maxSec = 7f;
@@ -31,13 +33,16 @@ public class EnemyController : MonoBehaviour
             _sec = 0;
         }
         //Debug.Log(_sec + " " + _targetTime);
-
-        Died();
     }
 
     private void Attack()
     {
         _animator.SetTrigger("Attack");
+
+        if (_enemyClip)
+        {
+            GameManager.instance.PlaySFX_fromAudioClip(_enemyClip);
+        }
     }
 
     public void AttackedOnAnimationFrame()
@@ -56,10 +61,12 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void Died()
+    public void Damage()
     {
-        if (GetComponent<HPSystem>().HP > 0) return;
-
-        GameManager.instance.GameFinish("CONGRADUATION!", true);
+        GetComponent<HPSystem>().HP--;
+        if (GetComponent<HPSystem>().HP <= 0)
+        {
+            GameManager.instance.GameFinish("CONGRADUATION!", true);
+        }
     }
 }

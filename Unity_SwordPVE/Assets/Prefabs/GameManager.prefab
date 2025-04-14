@@ -44,12 +44,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72a753663a75e9144809cade4603b415, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _audioSource: {fileID: 0}
   _titleUI: {fileID: 0}
+  _titleClip: {fileID: 8300000, guid: d2bfa0e462ccd5d4bbf4b135b77f4edf, type: 3}
   _gamOverUI: {fileID: 0}
+  _loseClip: {fileID: 8300000, guid: 4dc2c8e04adf85e44a54c22be95f7612, type: 3}
+  _winClip: {fileID: 8300000, guid: 393a549324e66e444a6f60eac7278233, type: 3}
   _titleTextInGameOverUI: {fileID: 0}
   _hud: {fileID: 0}
   _enemyController: {fileID: 0}
   _playerHPSystem: {fileID: 0}
+  _inGameClip: {fileID: 8300000, guid: dd577cd3e8544fb4ab289351ebb0aa78, type: 3}
   _stateText: {fileID: 0}
   _blockedText: {fileID: 0}
   isInGame: 0
