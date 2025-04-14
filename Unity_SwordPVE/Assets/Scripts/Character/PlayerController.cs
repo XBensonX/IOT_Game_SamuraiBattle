@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject _katanaObj;
     public bool isBlocking = false;
     public bool isAttacking = false;
+    public bool isTameshigiri = false;
     public Vector3 originGyro_MPU6050 = Vector3.zero;
 
     private Vector3 _originPos;

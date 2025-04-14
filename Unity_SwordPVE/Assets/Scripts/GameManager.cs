@@ -57,10 +57,13 @@ public class GameManager : MonoBehaviour
 
         if (isInGame && !MQTTDataHandler.instance.isHallTrigger)
         {
-            // TODO: Maybe have Tameshigiri(©~¦X±Ù) skill
             if (!PlayerController.instance.isAttacking || isGameOver)
             {
                 ResetGame();
+            }
+            else
+            {
+                if (!PlayerController.instance.isTameshigiri) PlayerController.instance.isTameshigiri = true;
             }
         }
 
@@ -71,7 +74,11 @@ public class GameManager : MonoBehaviour
     {
         if (PlayerController.instance.isAttacking)
         {
-            _stateText.text = "Attacking!";
+            if (PlayerController.instance.isTameshigiri)
+            {
+                _stateText.text = "Charging...";
+            }
+            else  _stateText.text = "Attacking!";
         }
         else
         {

@@ -61,9 +61,9 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void Damage()
+    public void Damage(int damage)
     {
-        GetComponent<HPSystem>().HP--;
+        GetComponent<HPSystem>().HP -= damage;
         if (GetComponent<HPSystem>().HP <= 0)
         {
             GameManager.instance.GameFinish("CONGRADUATION!", true);
