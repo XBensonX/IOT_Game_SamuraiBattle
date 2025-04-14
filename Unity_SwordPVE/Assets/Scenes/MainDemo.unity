@@ -9522,44 +9522,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65291c8a18f74be4e98cb45bfd1e1fc9, type: 3}
---- !u!84 &331168934
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 5
-  m_Width: 512
-  m_Height: 512
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 94
-  m_ColorFormat: 4
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1001 &332448581
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23060,7 +23022,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 128
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 331168934}
+  m_TargetTexture: {fileID: 1109818751}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -31630,6 +31592,44 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!84 &1109818751
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 512
+  m_Height: 512
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 94
+  m_ColorFormat: 4
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!4 &1113463026 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9176242562311319873, guid: 4ae3c4ca2edaf5b42b27bf3243dbdbd0,
@@ -60343,13 +60343,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6806746716247249975, guid: ad79f20d86f1d264db1b80032d7e449b,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6806746716247249975, guid: ad79f20d86f1d264db1b80032d7e449b,
+        type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: d2bfa0e462ccd5d4bbf4b135b77f4edf, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 6806746716247249975, guid: ad79f20d86f1d264db1b80032d7e449b,
         type: 3}
       propertyPath: m_PlayOnAwake
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8500728801900362316, guid: ad79f20d86f1d264db1b80032d7e449b,
         type: 3}
@@ -64416,12 +64421,12 @@ PrefabInstance:
         type: 3}
       propertyPath: _winClip
       value: 
-      objectReference: {fileID: 8300000, guid: 393a549324e66e444a6f60eac7278233, type: 3}
+      objectReference: {fileID: 8300000, guid: 064f3cb9ba344a940b480587529e3ca1, type: 3}
     - target: {fileID: 6244403362655600455, guid: 967ce230bbb381c498a73f7bd5988ab4,
         type: 3}
       propertyPath: _loseClip
       value: 
-      objectReference: {fileID: 8300000, guid: 4dc2c8e04adf85e44a54c22be95f7612, type: 3}
+      objectReference: {fileID: 8300000, guid: 509daefd49b091a4aae65a0ee16d4ba1, type: 3}
     - target: {fileID: 6244403362655600455, guid: 967ce230bbb381c498a73f7bd5988ab4,
         type: 3}
       propertyPath: _bgmSource
@@ -64441,7 +64446,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _titleClip
       value: 
-      objectReference: {fileID: 8300000, guid: d2bfa0e462ccd5d4bbf4b135b77f4edf, type: 3}
+      objectReference: {fileID: 8300000, guid: 63564b3abcec64b489207fd8fd5a82bc, type: 3}
     - target: {fileID: 6244403362655600455, guid: 967ce230bbb381c498a73f7bd5988ab4,
         type: 3}
       propertyPath: _attackClip
@@ -64451,7 +64456,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _inGameClip
       value: 
-      objectReference: {fileID: 8300000, guid: dd577cd3e8544fb4ab289351ebb0aa78, type: 3}
+      objectReference: {fileID: 8300000, guid: 22fcc2c3ad70af9478c90e60b3e7a7b6, type: 3}
     - target: {fileID: 6244403362655600455, guid: 967ce230bbb381c498a73f7bd5988ab4,
         type: 3}
       propertyPath: _audioSource

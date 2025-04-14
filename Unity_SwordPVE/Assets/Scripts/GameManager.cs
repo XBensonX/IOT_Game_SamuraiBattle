@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         if (instance == null) instance = this;
+        _bgmSource.clip = _titleClip;
+        _bgmSource.Play();
     }
 
     private void Update()

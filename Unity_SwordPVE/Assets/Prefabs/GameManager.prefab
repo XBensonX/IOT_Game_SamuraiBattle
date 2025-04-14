@@ -44,17 +44,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72a753663a75e9144809cade4603b415, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _audioSource: {fileID: 0}
+  _bgmSource: {fileID: 0}
   _titleUI: {fileID: 0}
-  _titleClip: {fileID: 8300000, guid: d2bfa0e462ccd5d4bbf4b135b77f4edf, type: 3}
+  _titleClip: {fileID: 8300000, guid: 63564b3abcec64b489207fd8fd5a82bc, type: 3}
   _gamOverUI: {fileID: 0}
-  _loseClip: {fileID: 8300000, guid: 4dc2c8e04adf85e44a54c22be95f7612, type: 3}
-  _winClip: {fileID: 8300000, guid: 393a549324e66e444a6f60eac7278233, type: 3}
+  _loseClip: {fileID: 8300000, guid: 509daefd49b091a4aae65a0ee16d4ba1, type: 3}
+  _winClip: {fileID: 8300000, guid: 064f3cb9ba344a940b480587529e3ca1, type: 3}
   _titleTextInGameOverUI: {fileID: 0}
   _hud: {fileID: 0}
   _enemyController: {fileID: 0}
   _playerHPSystem: {fileID: 0}
-  _inGameClip: {fileID: 8300000, guid: dd577cd3e8544fb4ab289351ebb0aa78, type: 3}
+  _audioSource: {fileID: 6806746716247249975, guid: ad79f20d86f1d264db1b80032d7e449b,
+    type: 3}
+  _inGameClip: {fileID: 8300000, guid: 22fcc2c3ad70af9478c90e60b3e7a7b6, type: 3}
+  _attackClip: {fileID: 8300000, guid: 099e9121ba9538e489bc1d2b8afb5d43, type: 3}
+  _defenseClip: {fileID: 8300000, guid: 78e8a95e75abd2847a4e64d2de2fd2ff, type: 3}
   _stateText: {fileID: 0}
   _blockedText: {fileID: 0}
   isInGame: 0
