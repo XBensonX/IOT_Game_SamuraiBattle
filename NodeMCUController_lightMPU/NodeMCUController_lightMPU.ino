@@ -1,6 +1,5 @@
-#include "I2Cdev.h"
-#include "MPU6050.h"
 #include <Wire.h>
+#include <MPU6050_light.h>
 #include <ESP8266WiFi.h> 
 #include <PubSubClient.h>
 #include <Adafruit_ADS1X15.h>
@@ -31,8 +30,10 @@ const char* mqtt_topic = "sensor/data";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
-MPU6050 mpu;
+MPU6050 mpu(Wire);
 Adafruit_ADS1115 ads;
+
+unsigned long timer = 0;
 
 TwoWire ads_i2cWire = TwoWire();
 
@@ -48,26 +49,17 @@ void setup() {
     setup_wifi(); 
 
     /***************** MPU6050 *****************/
+    Wire.begin();
 
-    /*--Start I2C interface--*/
-    #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
-      Wire.begin(); 
-    #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
-      Fastwire::setup(400, true);
-    #endif
+    byte state = mpu.begin();
+    Serial.print(F("MPU6050 status: "));
+    Serial.println(state == 0 ? "Success" : "Fail");
+    while(state!=0){ } // stop everything if could not connect to MPU6050
     
-    // Initialize MPU-6050
-    Serial.println("Initializing MPU...");
-    mpu.initialize();
-    Serial.println("Testing MPU6050 connection...");
-    if(mpu.testConnection() ==  false){
-      Serial.println("MPU6050 connection failed");
-      while(true);
-    }
-    else{
-      Serial.println("MPU6050 connection successful");
-    } 
-    offsetMPU6050();
+    Serial.println(F("Calculating offsets, do not move MPU6050"));
+    delay(1000);
+    mpu.calcOffsets(true,true); // gyro and accelero
+    Serial.println("Done!\n");
 
     /***************** ADS1115: JoySitck I2C *****************/
 //    // Initialize ADS1115
@@ -111,31 +103,6 @@ void reconnect() {
     }
 }
 
-void offsetMPU6050() {
-    /* Use the code below to change accel/gyro offset values. Use MPU6050_Zero to obtain the recommended offsets */ 
-    Serial.println("Updating internal sensor offsets...\n");
-    mpu.setXAccelOffset(0); //Set your accelerometer offset for axis X
-    mpu.setYAccelOffset(0); //Set your accelerometer offset for axis Y
-    mpu.setZAccelOffset(0); //Set your accelerometer offset for axis Z
-    mpu.setXGyroOffset(0);  //Set your gyro offset for axis X
-    mpu.setYGyroOffset(0);  //Set your gyro offset for axis Y
-    mpu.setZGyroOffset(0);  //Set your gyro offset for axis Z
-    /*Print the defined offsets*/
-    Serial.print("\t");
-    Serial.print(mpu.getXAccelOffset());
-    Serial.print("\t");
-    Serial.print(mpu.getYAccelOffset()); 
-    Serial.print("\t");
-    Serial.print(mpu.getZAccelOffset());
-    Serial.print("\t");
-    Serial.print(mpu.getXGyroOffset()); 
-    Serial.print("\t");
-    Serial.print(mpu.getYGyroOffset());
-    Serial.print("\t");
-    Serial.print(mpu.getZGyroOffset());
-    Serial.print("\n");
-}
-
 void loop() {
     // Ensure MQTT connection
     if (!client.connected()) {
@@ -159,24 +126,22 @@ void loop() {
     //float yVoltage = joyY * 0.125 / 1000.0;
     
     /***************** Read MPU6050 *****************/
-    int16_t axLSB, ayLSB, azLSB;
-    int16_t gx, gy, gz;
-    //mpu.getMotion6(&axLSB, &ayLSB, &azLSB, &gx, &gy, &gz);
-    mpu.getAcceleration(&axLSB, &ayLSB, &azLSB);
-    mpu.getRotation(&gx, &gy, &gz);
-
-    // Normalization
-    float ax = (float)axLSB / 4096;
-    float ay = (float)ayLSB / 4096;
-    float az = (float)azLSB / 4096;
-    float rateRoll = (float)gx/65.5;
-    float ratePitch = (float)gy/65.5;
-    float rateYaw = (float)gz/65.5;
-
-    // Calculate axis angle
-    float angleRoll = atan(ay/sqrt(ax*ax+az*az))*1/RAD_TO_DEG;
-    float anglePitch = atan(-ax/sqrt(ay*ay+az*az))*1/RAD_TO_DEG;
-    float angleYaw = atan(az/sqrt(ax*ax+ay*ay))*1/RAD_TO_DEG;
+    mpu.update();
+    
+    float ax = mpu.getAccX();
+    float ay = mpu.getAccY();
+    float az = mpu.getAccZ();
+    
+    float gx = mpu.getGyroX();
+    float gy = mpu.getGyroY();
+    float gz = mpu.getGyroZ();
+    
+    float accAngleRoll = mpu.getAccAngleX();
+    float accAnglePitch = mpu.getAccAngleY();
+    
+    float angleRoll = mpu.getAngleX();
+    float anglePitch = mpu.getAngleY();
+    float angleYaw = mpu.getAngleZ();
 
 //    Serial.print("Roll: ");
 //    Serial.print(angleRoll);

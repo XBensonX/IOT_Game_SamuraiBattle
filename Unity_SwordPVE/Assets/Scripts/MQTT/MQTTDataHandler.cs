@@ -19,6 +19,7 @@ public class MQTTDataHandler : MonoBehaviour
     public bool isJoystickPressed = false; // Defense
     public Vector3 acceleration_MPU6050 = Vector3.zero;
     public Vector3 gyro_MPU6050 = Vector3.zero;
+    public Vector3 angle_MPU6050 = Vector3.zero;
 
     [Header("")]
     private float _holdSecs = 0;
@@ -82,6 +83,11 @@ public class MQTTDataHandler : MonoBehaviour
                     string gyroXYZ_Str = sensor.Split(":")[1].Replace("(", "").Replace(")", "");
                     string[] gyroXYZ = gyroXYZ_Str.Split(" "); // Final Split: Spliting to X Y Z for Vector3.
                     gyro_MPU6050 = new Vector3(float.Parse(gyroXYZ[0]), float.Parse(gyroXYZ[1]), float.Parse(gyroXYZ[2]));
+                    break;
+                case "Angle":
+                    string angleXYZ_Str = sensor.Split(":")[1].Replace("(", "").Replace(")", "");
+                    string[] angleXYZ = angleXYZ_Str.Split(" "); // Final Split: Spliting to X Y Z for Vector3.
+                    angle_MPU6050 = new Vector3(float.Parse(angleXYZ[0]), float.Parse(angleXYZ[1]), float.Parse(angleXYZ[2]));
                     break;
                 default:
                     break;
