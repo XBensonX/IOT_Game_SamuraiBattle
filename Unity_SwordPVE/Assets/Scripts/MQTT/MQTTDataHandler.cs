@@ -15,7 +15,7 @@ public class MQTTDataHandler : MonoBehaviour
     public bool isHallTrigger = false;
     public bool isAttackBtnPressed = false;
     public bool isResetBtnPressed = false;
-    public float joystickVal = 530f;
+    public Vector2 joystickVal = Vector2.zero;
     public bool isJoystickPressed = false; // Defense
     public Vector3 acceleration_MPU6050 = Vector3.zero;
     public Vector3 gyro_MPU6050 = Vector3.zero;
@@ -67,11 +67,11 @@ public class MQTTDataHandler : MonoBehaviour
                 case "Button_2": // Defense Button
                     isResetBtnPressed = sensor.Split(":")[1] == "1" ? true : false;
                     break;
-                case "Joystick_X": // Joystick movement
-                    joystickVal = float.Parse(sensor.Split(":")[1]);
-                    break;
-                case "Joystick_SW": // Joystick Button
-                    isJoystickPressed = sensor.Split(":")[1] == "1" ? true : false;
+                case "Joystick": // Joystick
+                    string joystickStr = sensor.Split(":")[1].Replace("(", "").Replace(")", "");
+                    string[] joystickXTSW = joystickStr.Split(" "); // Final Split: Spliting to X Y for Vector2 and SW.
+                    joystickVal = new Vector2(float.Parse(joystickXTSW[0]), float.Parse(joystickXTSW[1]));
+                    isJoystickPressed = joystickXTSW[2] == "1" ? true : false;
                     break;
                 case "Accel": // acceleration in MPU6050
                     string accXYZ_Str = sensor.Split(":")[1].Replace("(", "").Replace(")", "");
@@ -91,7 +91,7 @@ public class MQTTDataHandler : MonoBehaviour
 
     private void Offset()
     {
-        PlayerController.instance.originJoystick = joystickVal;
+        PlayerController.instance.originJoystick = joystickVal.y;
         PlayerController.instance.ResetKatanaPosAndRot();
     }
 }

@@ -3,6 +3,7 @@
 #include <Wire.h>
 #include <ESP8266WiFi.h> 
 #include <PubSubClient.h>
+#include <Adafruit_ADS1X15.h>
 
 // Wi-Fi settings
 const char* ssid  = "HW_ROUTER";
@@ -20,25 +21,19 @@ const char* mqtt_topic = "sensor/data";
 #define BUTTON1_PIN 12      // D6
 #define BUTTON2_PIN 13      // D7
 
-#define JOYSTICK_X A0
+//#define JOYSTICK_X 0
+//#define JOYSTICK_Y 1
+#define JOYSTICK_Y A0
 #define JOYSTICK_SW 15
-
-#define OUTPUT_READABLE_ACCELGYRO
 
 WiFiClient espClient;
 PubSubClient client(espClient);
-
-/* MPU6050 default I2C address is 0x68*/
 MPU6050 mpu;
+Adafruit_ADS1115 ads;
+
+TwoWire ads_i2cWire = TwoWire();
 
 void setup() {
-    /*--Start I2C interface--*/
-    #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
-      Wire.begin(); 
-    #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
-      Fastwire::setup(400, true);
-    #endif
-  
     Serial.begin(115200);
 
     pinMode(HALL_SENSOR_PIN, INPUT);
@@ -47,8 +42,15 @@ void setup() {
     pinMode(JOYSTICK_SW, INPUT_PULLUP);  // Joystick button as digital input
 
     // Connect to Wi-Fi
-    setup_wifi();
+    setup_wifi(); 
 
+    /*--Start I2C interface--*/
+    #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+      Wire.begin(); 
+    #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
+      Fastwire::setup(400, true);
+    #endif
+    
     // Initialize MPU-6050
     Serial.println("Initializing MPU...");
     mpu.initialize();
@@ -61,6 +63,14 @@ void setup() {
       Serial.println("MPU6050 connection successful");
     }
     offsetMPU6050();
+
+//    // Initialize ADS1115
+//    ads_i2cWire.begin(0, 2); // using D3 (GPIO0) as SDA, D4 (GPIO2) as SCL (I2C)
+//    if (!ads.begin(ADS1X15_ADDRESS, &ads_i2cWire)) {
+//      Serial.println("ADS1115 not found.");
+//      while (true);
+//    }
+//    ads.setGain(GAIN_ONE); // GAIN_ONE = ±4.096V (can use to 3.3V joystick)
 
     client.setServer(mqtt_server, mqtt_port);
     Serial.print(mqtt_server);
@@ -132,16 +142,23 @@ void loop() {
     int button2State = digitalRead(BUTTON2_PIN);
 
     // Read joystick
-    int joyX = analogRead(JOYSTICK_X);
-    int joySW = digitalRead(JOYSTICK_SW);
-    joySW=!joySW;
+    float joyX;
+    float joyY = analogRead(JOYSTICK_Y);
+    //int16_t joyX = ads.readADC_SingleEnded(JOYSTICK_X);
+    //int16_t joyY = ads.readADC_SingleEnded(JOYSTICK_Y);
+    int joySW = !digitalRead(JOYSTICK_SW);
+
+    // transfer to 0.125 mV/bit（GAIN_ONE）
+    //float xVoltage = joyX * 0.125 / 1000.0;
+    //float yVoltage = joyY * 0.125 / 1000.0;
+    
     // Read MPU6050
     int16_t axLSB, ayLSB, azLSB;
     int16_t gx, gy, gz;
     mpu.getMotion6(&axLSB, &ayLSB, &azLSB, &gx, &gy, &gz);
     //mpu.getAcceleration(&axLSB, &ayLSB, &azLSB);
     //mpu.getRotation(&gx, &gy, &gz);
-
+    
     float rateRoll = (float)gx/65.5;
     float ratePitch = (float)gy/65.5;
     float rateYaw = (float)gz/65.5;
@@ -154,8 +171,7 @@ void loop() {
     String payload = "Hall_Sensor:" + String(hallValue) + ","
                      + "Button_1:" + String(button1State) + ","
                      + "Button_2:" + String(button2State) + ","
-                     + "Joystick_X:" + String(joyX) + ","
-                     + "Joystick_SW:" + String(joySW) + ","
+                     + "Joystick:(" + String(joyX) + " " + String(joyY) + " " + String(joySW) + "),"
                      + "Accel:(" + String(axLSB) + " " + String(ayLSB) + " " + String(azLSB) + "),"
                      + "Gyro:(" + String(gx) + " " + String(gy) + " " + String(gz) + ")";
 

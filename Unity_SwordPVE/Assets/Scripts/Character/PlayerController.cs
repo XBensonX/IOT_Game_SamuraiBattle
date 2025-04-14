@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        float val = MQTTDataHandler.instance.joystickVal;
+        float val = MQTTDataHandler.instance.joystickVal.y;
         if (val >= originJoystick + _sensitivityJoystick) // right
         {
             transform.position += transform.right * Time.deltaTime * _moveSpeed;
