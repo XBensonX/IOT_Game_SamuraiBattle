@@ -120,7 +120,9 @@ public class PlayerController : MonoBehaviour
     {
         if (_katanaObj)
         {
-            //_katanaObj.transform.localEulerAngles = _originRot + MQTTDataHandler.instance.angles_MPU6050;
+            _katanaObj.transform.localEulerAngles = new Vector3(_originRot.x + MQTTDataHandler.instance.angle_MPU6050.x,
+                                                                _originRot.y + MQTTDataHandler.instance.angle_MPU6050.z,
+                                                                _originRot.z + MQTTDataHandler.instance.angle_MPU6050.y);
         }
     }
 
