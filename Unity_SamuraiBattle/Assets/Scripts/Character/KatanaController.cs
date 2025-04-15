@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class KatanaController : MonoBehaviour
 {
     [SerializeField] private float triggerAngle = 60f;
-    [SerializeField] private GameObject enemyObj;
+    //[SerializeField] private GameObject enemyObj;
     [SerializeField] private Image _tameshigiriImg;
 
     private bool isInEnemyBody = false;
@@ -17,7 +17,7 @@ public class KatanaController : MonoBehaviour
         if (!hasDamaged && PlayerController.instance.isAttacking && isInEnemyBody)
         {
             hasDamaged = true;
-            enemyObj.GetComponent<EnemyController>().Damage(1);
+            PlayerController.instance.enemyController.Damage(1);
             GameManager.instance.AttackState();
         }
 
@@ -25,7 +25,7 @@ public class KatanaController : MonoBehaviour
         if (PlayerController.instance.isTameshigiri && PlayerController.instance.isAttacking && MQTTDataHandler.instance.isHallTrigger)
         {
             _tameshigiriImg.gameObject.SetActive(true);
-            enemyObj.GetComponent<EnemyController>().Damage(2);
+            PlayerController.instance.enemyController.Damage(2);
             GameManager.instance.AttackState();
             PlayerController.instance.isTameshigiri = false;
             Invoke("TameshigiriEnd", 2f);

@@ -6,7 +6,8 @@ public class EnemyController : MonoBehaviour
 {
     private Animator _animator;
 
-    [SerializeField] private AudioClip _enemyClip;
+    [SerializeField] private AudioClip _attackClip;
+    [SerializeField] private AudioClip _hurtClip;
 
     [Header("Attack Time Duration")]
     [SerializeField] private float _minSec = 3f;
@@ -26,10 +27,10 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         _sec += Time.deltaTime;
-        if (_sec >= _targetTime)
+        if (_sec >= _targetTime) // holding the button
         {
             Attack();
-            _targetTime = Random.Range(_minSec, _maxSec);
+            _targetTime = Random.Range(_minSec, _maxSec); // Random to decide the next attack in time
             _sec = 0;
         }
         //Debug.Log(_sec + " " + _targetTime);
@@ -39,9 +40,9 @@ public class EnemyController : MonoBehaviour
     {
         _animator.SetTrigger("Attack");
 
-        if (_enemyClip)
+        if (_attackClip)
         {
-            GameManager.instance.PlaySFX_fromAudioClip(_enemyClip);
+            GameManager.instance.PlaySFX_fromAudioClip(_attackClip);
         }
     }
 
@@ -49,11 +50,7 @@ public class EnemyController : MonoBehaviour
     {
         if (!PlayerController.instance.isBlocking)
         {
-            PlayerController.instance.GetComponent<HPSystem>().HP--;
-            if (PlayerController.instance.GetComponent<HPSystem>().HP <= 0)
-            {
-                GameManager.instance.GameFinish("YOU DIED", false);
-            }
+            PlayerController.instance.Damage(1);
         }
         else
         {
@@ -63,6 +60,11 @@ public class EnemyController : MonoBehaviour
 
     public void Damage(int damage)
     {
+        if (_hurtClip)
+        {
+            GameManager.instance.PlaySFX_fromAudioClip(_hurtClip);
+        }
+
         GetComponent<HPSystem>().HP -= damage;
         if (GetComponent<HPSystem>().HP <= 0)
         {

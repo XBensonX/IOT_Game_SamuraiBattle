@@ -8,8 +8,10 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
 
+    [SerializeField] private AudioClip _hurtClip;
+
     [Header("Enemy Settings")]
-    [SerializeField] private EnemyController _enemy;
+    public EnemyController enemyController;
     [SerializeField] private float _distanceToEnemy = 3.0f;
 
     [Header("Katana Setting")]
@@ -92,16 +94,17 @@ public class PlayerController : MonoBehaviour
 
     private void LootAtEnemy()
     {
-        transform.LookAt(_enemy.transform);
+        transform.LookAt(enemyController.transform);
         transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, transform.localEulerAngles.z);
 
         _originPosY = transform.position.y;
-        Vector3 newPos = _enemy.transform.position - transform.forward * _distanceToEnemy;
+        Vector3 newPos = enemyController.transform.position - transform.forward * _distanceToEnemy;
         transform.position = new Vector3(newPos.x, _originPosY, newPos.z);
     }
 
     private void HeadBob()
     {
+        // Simulating breathing
         _timer += Time.deltaTime * bobSpeed;
         joint.localPosition = new Vector3(_jointOriginalPos.x + Mathf.Sin(_timer) * bobAmount.x, 
                                           _jointOriginalPos.y + Mathf.Sin(_timer) * bobAmount.y, 
@@ -123,6 +126,8 @@ public class PlayerController : MonoBehaviour
     {
         if (_katanaObj)
         {
+            // The direction of X Y Z in Unity should to adjust, according to the direction of the MPU6050.
+            // In this case is -y (MPU6050) to x (Uinty), -z (MPU6050) to y (Uinty), x (MPU6050) to z (Uinty)
             Vector3 newAngle = MQTTDataHandler.instance.angle_MPU6050 - MQTTDataHandler.instance.angleOffset_MPU6050;
             _katanaObj.transform.localEulerAngles = new Vector3(_originRot.x + -newAngle.y,
                                                                 _originRot.y + -newAngle.z,
@@ -145,5 +150,19 @@ public class PlayerController : MonoBehaviour
     {
         isAttacking = false;
         isBlocking = true;
+    }
+
+    public void Damage(int damage)
+    {
+        if (_hurtClip)
+        {
+            GameManager.instance.PlaySFX_fromAudioClip(_hurtClip);
+        }
+
+        GetComponent<HPSystem>().HP--;
+        if (GetComponent<HPSystem>().HP <= 0)
+        {
+            GameManager.instance.GameFinish("YOU DIED", false);
+        }
     }
 }

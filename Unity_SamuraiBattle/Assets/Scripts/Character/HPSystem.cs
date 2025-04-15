@@ -23,7 +23,7 @@ public class HPSystem : MonoBehaviour
     private void Start()
     {
         _hp = _maxHP;
-        for (int i = 0; i < _hp; i++)
+        for (int i = 0; i < _hp; i++) // generating hp points
         {
             _images.Add(Instantiate(_image, _hpGroupInUI.transform));
             _images[i].GetComponent<RectTransform>().localPosition

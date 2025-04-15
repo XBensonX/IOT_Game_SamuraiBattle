@@ -22,7 +22,7 @@ public class MQTTDataHandler : MonoBehaviour
     public Vector3 gyro_MPU6050 = Vector3.zero;
     public Vector3 angle_MPU6050 = Vector3.zero;
 
-    public Vector3 angleOffset_MPU6050 = Vector3.zero;
+    [HideInInspector] public Vector3 angleOffset_MPU6050 = Vector3.zero;
 
     [Header("")]
     private float _holdSecs = 0;
@@ -103,7 +103,7 @@ public class MQTTDataHandler : MonoBehaviour
         catch (Exception e) { }
     }
 
-    private void Offset()
+    public void Offset()
     {
         PlayerController.instance.originJoystick = joystickVal.y;
         PlayerController.instance.ResetKatanaPosAndRot();

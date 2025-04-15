@@ -50,6 +50,8 @@ public class GameManager : MonoBehaviour
             _playerHPSystem.enabled = true;
             PlayerController.instance.DrawSword();
 
+            MQTTDataHandler.instance.Offset();
+
             // audio
             _bgmSource.clip = _inGameClip;
             _bgmSource.Play();
@@ -63,6 +65,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                // Tameshigiri(©~¦X±Ù) skill
                 if (!PlayerController.instance.isTameshigiri) PlayerController.instance.isTameshigiri = true;
             }
         }
