@@ -2,7 +2,7 @@
 #include <MPU6050_light.h>
 #include <ESP8266WiFi.h> 
 #include <PubSubClient.h>
-#include <Adafruit_ADS1X15.h>
+//#include <Adafruit_ADS1X15.h>
 
 // Wi-Fi settings
 const char* ssid  = "LAPTOP-SUO53CI2 7053";
@@ -32,11 +32,11 @@ const char* mqtt_topic_unity = "unity/data";
 WiFiClient espClient;
 PubSubClient client(espClient);
 MPU6050 mpu(Wire);
-Adafruit_ADS1115 ads;
+//Adafruit_ADS1115 ads;
 
 unsigned long timer = 0;
 
-TwoWire ads_i2cWire = TwoWire();
+//TwoWire ads_i2cWire = TwoWire();
 
 void setup() {
     Serial.begin(115200);

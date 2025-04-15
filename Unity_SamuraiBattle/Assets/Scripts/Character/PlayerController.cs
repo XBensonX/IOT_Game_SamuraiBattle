@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         Move();
-        LootAtEnemy();
+        LookAtEnemy();
         HeadBob();
 
         SyncKatanaRotation();
@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void LootAtEnemy()
+    private void LookAtEnemy()
     {
         transform.LookAt(enemyController.transform);
         transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, transform.localEulerAngles.z);

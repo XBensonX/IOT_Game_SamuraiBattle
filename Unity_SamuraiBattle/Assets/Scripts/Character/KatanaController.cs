@@ -8,11 +8,12 @@ public class KatanaController : MonoBehaviour
 {
     [SerializeField] private float triggerAngle = 60f;
     //[SerializeField] private GameObject enemyObj;
-    [SerializeField] private Image _tameshigiriImg;
+       
     [SerializeField] private float _cooldown = 10f;
     private float _cooldown_current = 0;
 
     [Header("UI")]
+    [SerializeField] private Image _tameshigiriImg;
     [SerializeField] private Image _cooldownImg;
     [SerializeField] private TextMeshProUGUI _cooldownText;
     [SerializeField] private TextMeshProUGUI _skillReadyText;
