@@ -63,11 +63,6 @@ public class GameManager : MonoBehaviour
             {
                 ResetGame();
             }
-            else
-            {
-                // Tameshigiri(©~¦X±Ù) skill
-                if (!PlayerController.instance.isTameshigiri) PlayerController.instance.isTameshigiri = true;
-            }
         }
 
         if (isInGame) ShowStateInGame();
