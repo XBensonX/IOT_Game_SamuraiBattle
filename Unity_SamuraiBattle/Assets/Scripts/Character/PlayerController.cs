@@ -115,6 +115,7 @@ public class PlayerController : MonoBehaviour
             _katanaObj.transform.localPosition = _originPos;
             _katanaObj.transform.localEulerAngles = _originRot;
         }
+        MQTTDataHandler.instance.angleOffset_MPU6050 = MQTTDataHandler.instance.angle_MPU6050;
         //ConnectToBroker.instance.Publish("Reset Position");
     }
 
@@ -122,9 +123,10 @@ public class PlayerController : MonoBehaviour
     {
         if (_katanaObj)
         {
-            _katanaObj.transform.localEulerAngles = new Vector3(_originRot.x + -MQTTDataHandler.instance.angle_MPU6050.y,
-                                                                _originRot.y + -MQTTDataHandler.instance.angle_MPU6050.z,
-                                                                _originRot.z + MQTTDataHandler.instance.angle_MPU6050.x);
+            Vector3 newAngle = MQTTDataHandler.instance.angle_MPU6050 - MQTTDataHandler.instance.angleOffset_MPU6050;
+            _katanaObj.transform.localEulerAngles = new Vector3(_originRot.x + -newAngle.y,
+                                                                _originRot.y + -newAngle.z,
+                                                                _originRot.z + newAngle.x);
         }
     }
 

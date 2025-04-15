@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,8 @@ public class MQTTDataHandler : MonoBehaviour
     public Vector3 acceleration_MPU6050 = Vector3.zero;
     public Vector3 gyro_MPU6050 = Vector3.zero;
     public Vector3 angle_MPU6050 = Vector3.zero;
+
+    public Vector3 angleOffset_MPU6050 = Vector3.zero;
 
     [Header("")]
     private float _holdSecs = 0;
@@ -46,54 +49,58 @@ public class MQTTDataHandler : MonoBehaviour
 
     public void SplitData()
     {
-        if (data == string.Empty) return;
-
-        string[] sensorRows = data.Split(','); // First Split: Spliting to each sensor
-        foreach (string sensor in sensorRows)
+        try
         {
-            // Second Split: Spliting 2 column.
-            // Format is "SENSOR:DATA", it just need to save DATA
-            string[] sensorColumns = sensor.Split(":");
+            if (data == string.Empty) return;
 
-            // Saving data directly if DATA is integer.
-            // Otherwise, handle it.
-
-            switch (sensorColumns[0])
+            string[] sensorRows = data.Split(','); // First Split: Spliting to each sensor
+            foreach (string sensor in sensorRows)
             {
-                case "Hall_Sensor": // Hall Sensor
-                    isHallTrigger = sensor.Split(":")[1] == "1" ? true : false;
-                    break;
-                case "Button_1": // Attack Button
-                    isAttackBtnPressed = sensor.Split(":")[1] == "1" ? true : false;
-                    break;
-                case "Button_2": // Defense Button
-                    isResetBtnPressed = sensor.Split(":")[1] == "1" ? true : false;
-                    break;
-                case "Joystick": // Joystick
-                    string joystickStr = sensor.Split(":")[1].Replace("(", "").Replace(")", "");
-                    string[] joystickXTSW = joystickStr.Split(" "); // Final Split: Spliting to X Y for Vector2 and SW.
-                    joystickVal = new Vector2(float.Parse(joystickXTSW[0]), float.Parse(joystickXTSW[1]));
-                    isJoystickPressed = joystickXTSW[2] == "1" ? true : false;
-                    break;
-                case "Accel": // acceleration in MPU6050
-                    string accXYZ_Str = sensor.Split(":")[1].Replace("(", "").Replace(")", "");
-                    string[] accXYZ = accXYZ_Str.Split(" "); // Final Split: Spliting to X Y Z for Vector3.
-                    acceleration_MPU6050 = new Vector3(float.Parse(accXYZ[0]), float.Parse(accXYZ[1]), float.Parse(accXYZ[2]));
-                    break;
-                case "Gyro": // gyro in MPU6050
-                    string gyroXYZ_Str = sensor.Split(":")[1].Replace("(", "").Replace(")", "");
-                    string[] gyroXYZ = gyroXYZ_Str.Split(" "); // Final Split: Spliting to X Y Z for Vector3.
-                    gyro_MPU6050 = new Vector3(float.Parse(gyroXYZ[0]), float.Parse(gyroXYZ[1]), float.Parse(gyroXYZ[2]));
-                    break;
-                case "Angle":
-                    string angleXYZ_Str = sensor.Split(":")[1].Replace("(", "").Replace(")", "");
-                    string[] angleXYZ = angleXYZ_Str.Split(" "); // Final Split: Spliting to X Y Z for Vector3.
-                    angle_MPU6050 = new Vector3(float.Parse(angleXYZ[0]), float.Parse(angleXYZ[1]), float.Parse(angleXYZ[2]));
-                    break;
-                default:
-                    break;
+                // Second Split: Spliting 2 column.
+                // Format is "SENSOR:DATA", it just need to save DATA
+                string[] sensorColumns = sensor.Split(":");
+
+                // Saving data directly if DATA is integer.
+                // Otherwise, handle it.
+
+                switch (sensorColumns[0])
+                {
+                    case "Hall_Sensor": // Hall Sensor
+                        isHallTrigger = sensor.Split(":")[1] == "1" ? true : false;
+                        break;
+                    case "Button_1": // Attack Button
+                        isAttackBtnPressed = sensor.Split(":")[1] == "1" ? true : false;
+                        break;
+                    case "Button_2": // Defense Button
+                        isResetBtnPressed = sensor.Split(":")[1] == "1" ? true : false;
+                        break;
+                    case "Joystick": // Joystick
+                        string joystickStr = sensor.Split(":")[1].Replace("(", "").Replace(")", "");
+                        string[] joystickXTSW = joystickStr.Split(" "); // Final Split: Spliting to X Y for Vector2 and SW.
+                        joystickVal = new Vector2(float.Parse(joystickXTSW[0]), float.Parse(joystickXTSW[1]));
+                        isJoystickPressed = joystickXTSW[2] == "1" ? true : false;
+                        break;
+                    case "Accel": // acceleration in MPU6050
+                        string accXYZ_Str = sensor.Split(":")[1].Replace("(", "").Replace(")", "");
+                        string[] accXYZ = accXYZ_Str.Split(" "); // Final Split: Spliting to X Y Z for Vector3.
+                        acceleration_MPU6050 = new Vector3(float.Parse(accXYZ[0]), float.Parse(accXYZ[1]), float.Parse(accXYZ[2]));
+                        break;
+                    case "Gyro": // gyro in MPU6050
+                        string gyroXYZ_Str = sensor.Split(":")[1].Replace("(", "").Replace(")", "");
+                        string[] gyroXYZ = gyroXYZ_Str.Split(" "); // Final Split: Spliting to X Y Z for Vector3.
+                        gyro_MPU6050 = new Vector3(float.Parse(gyroXYZ[0]), float.Parse(gyroXYZ[1]), float.Parse(gyroXYZ[2]));
+                        break;
+                    case "Angle":
+                        string angleXYZ_Str = sensor.Split(":")[1].Replace("(", "").Replace(")", "");
+                        string[] angleXYZ = angleXYZ_Str.Split(" "); // Final Split: Spliting to X Y Z for Vector3.
+                        angle_MPU6050 = new Vector3(float.Parse(angleXYZ[0]), float.Parse(angleXYZ[1]), float.Parse(angleXYZ[2]));
+                        break;
+                    default:
+                        break;
+                }
             }
         }
+        catch (Exception e) { }
     }
 
     private void Offset()

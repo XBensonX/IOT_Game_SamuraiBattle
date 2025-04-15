@@ -118,10 +118,12 @@ void mqttCallback(char *topic, byte *payload, unsigned int len) {
     Serial.println();
     Serial.println("-----------------------");
 
-    if (message.equals("Reset Position")){
-        mpu.calcOffsets(true,true); // gyro and accelero
-        Serial.println("Done!\n");
-    }
+//    if (message.equals("Reset Position")){
+//        Serial.println(F("Calculating offsets, do not move MPU6050"));
+//        delay(1000);
+//        mpu.calcOffsets(true,true); // gyro and accelero
+//        Serial.println("Done!\n");
+//    }
 }
 
 void loop() {
