@@ -5,15 +5,16 @@
 #include <Adafruit_ADS1X15.h>
 
 // Wi-Fi settings
-const char* ssid  = "HW_ROUTER";
-const char* password= "t12312361";
+const char* ssid  = "LAPTOP-SUO53CI2 7053";
+const char* password= "467hH=01";
 
 // MQTT settings
-const char* mqtt_server = "192.168.1.109";
+const char* mqtt_server = "192.168.137.1";
 const int mqtt_port =1883;
 const char* mqtt_user = "mqtt";
 const char* mqtt_password = "passwd";
 const char* mqtt_topic = "sensor/data";
+const char* mqtt_topic_unity = "unity/data";
 
 // Pin definitions
 #define HALL_SENSOR_PIN 14  // D5
@@ -71,6 +72,7 @@ void setup() {
 //    ads.setGain(GAIN_ONE); // GAIN_ONE = ±4.096V (can use to 3.3V joystick)
 
     client.setServer(mqtt_server, mqtt_port);
+    client.setCallback(mqttCallback);
     Serial.print(mqtt_server);
 }
 
@@ -95,11 +97,30 @@ void reconnect() {
         Serial.print("Attempting MQTT connection...");
         if (client.connect("ESP8266", mqtt_user, mqtt_password)) {
             Serial.println("Connected to MQTT broker");
+            client.subscribe(mqtt_topic_unity);
         } else {
             Serial.print("Failed to connect, rc=");
             Serial.print(client.state());
             delay(2000);
         }
+    }
+}
+
+void mqttCallback(char *topic, byte *payload, unsigned int len) {
+    String message = "";
+    Serial.print("Message received on topic: ");
+    Serial.println(topic);
+    Serial.print("Message:");
+    for (unsigned int i = 0; i < len; i++) {
+        Serial.print((char) payload[i]);
+        message += (char) payload[i];
+    }
+    Serial.println();
+    Serial.println("-----------------------");
+
+    if (message.equals("Reset Position")){
+        mpu.calcOffsets(true,true); // gyro and accelero
+        Serial.println("Done!\n");
     }
 }
 
@@ -166,7 +187,7 @@ void loop() {
         Serial.println(payload);
         Serial.println("Data sent to MQTT broker");
     } else {
-        //Serial.println("Failed to send data to MQTT broker");
+        Serial.println("Failed to send data to MQTT broker");
     }
 
     delay(10); // Wait for a while before sending the next set of data

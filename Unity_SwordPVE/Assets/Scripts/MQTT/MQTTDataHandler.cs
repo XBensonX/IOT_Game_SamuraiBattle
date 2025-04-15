@@ -40,6 +40,7 @@ public class MQTTDataHandler : MonoBehaviour
         {
             Offset();
             _holdSecs = 0;
+            Debug.Log("Reset!");
         }
     }
 

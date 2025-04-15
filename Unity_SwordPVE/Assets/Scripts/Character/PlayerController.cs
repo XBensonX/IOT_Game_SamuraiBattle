@@ -115,16 +115,16 @@ public class PlayerController : MonoBehaviour
             _katanaObj.transform.localPosition = _originPos;
             _katanaObj.transform.localEulerAngles = _originRot;
         }
-        ConnectToBroker.instance.Publish("Reset Postion");
+        //ConnectToBroker.instance.Publish("Reset Position");
     }
 
     private void SyncKatanaRotation()
     {
         if (_katanaObj)
         {
-            _katanaObj.transform.localEulerAngles = new Vector3(_originRot.x + MQTTDataHandler.instance.angle_MPU6050.y,
-                                                                _originRot.y + MQTTDataHandler.instance.angle_MPU6050.x,
-                                                                _originRot.z + MQTTDataHandler.instance.angle_MPU6050.z);
+            _katanaObj.transform.localEulerAngles = new Vector3(_originRot.x + -MQTTDataHandler.instance.angle_MPU6050.y,
+                                                                _originRot.y + -MQTTDataHandler.instance.angle_MPU6050.z,
+                                                                _originRot.z + MQTTDataHandler.instance.angle_MPU6050.x);
         }
     }
 

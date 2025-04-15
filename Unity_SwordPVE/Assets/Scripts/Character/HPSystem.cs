@@ -33,7 +33,7 @@ public class HPSystem : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(_hp);
+        //Debug.Log(_hp);
         UpdateUI();
     }
 

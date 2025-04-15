@@ -36,7 +36,7 @@ public class ConnectToBroker : MonoBehaviour
     void Recieve(object sender, MqttMsgPublishEventArgs e)
     {
         MQTTDataHandler.instance.data = Encoding.Default.GetString(e.Message);
-        Debug.Log(MQTTDataHandler.instance.data);
+        //Debug.Log(MQTTDataHandler.instance.data);
         MQTTDataHandler.instance.SplitData();
     }
 
