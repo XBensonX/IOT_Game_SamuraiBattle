@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
 
         if (isInGame && !MQTTDataHandler.instance.isHallTrigger)
         {
-            if (!PlayerController.instance.isAttacking || isGameOver)
+            if (MQTTDataHandler.instance.isResetBtnPressed || isGameOver)
             {
                 ResetGame();
             }
